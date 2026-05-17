@@ -1,7 +1,9 @@
-import app from "./app.js";
-import dotenv from "dotenv";
+if (process.env.NODE_ENV !== "production") {
+  const dotenv = await import("dotenv");
+  dotenv.default.config();
+}
 
-dotenv.config();
+import app from "./app.js";
 
 const PORT = process.env.PORT || 3000;
 
