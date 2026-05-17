@@ -1,9 +1,8 @@
 import { describe, test, expect } from "vitest";
 import request from "supertest";
-import app from "../app.js";
+import app from "../../app.js";
 
 describe("Posts API", () => {
-  // Test 7
   test("GET /posts - devuelve lista de posts", async () => {
     const res = await request(app).get("/posts");
     expect(res.statusCode).toBe(200);
@@ -11,7 +10,6 @@ describe("Posts API", () => {
     expect(res.body.length).toBeGreaterThan(0);
   });
 
-  // Test 8
   test("POST /posts - crea un post correctamente", async () => {
     const res = await request(app).post("/posts").send({
       title: "Post de prueba",
@@ -24,7 +22,6 @@ describe("Posts API", () => {
     expect(res.body.title).toBe("Post de prueba");
   });
 
-  // Test 9
   test("DELETE /posts/:id - devuelve 404 si no existe", async () => {
     const res = await request(app).delete("/posts/9999");
     expect(res.statusCode).toBe(404);
