@@ -24,9 +24,9 @@ CREATE TABLE posts (
 
 -- Seed: datos de ejemplo
 INSERT INTO authors (name, email, bio) VALUES
-  ('Ana Martinez', 'anamar@example.com', 'Desarrolladora full-stack apasionada por Node.js'),
-  ('Carlos Gambez', 'cgambez@example.com', 'Escritor técnico especializado en bases de datos'),
-  ('María Kaplan', 'mkaplan@example.com', 'Ingeniera de software con foco en APIs REST');
+  ('Ana García', 'ana@example.com', 'Desarrolladora full-stack apasionada por Node.js'),
+  ('Carlos Ruiz', 'carlos@example.com', 'Escritor técnico especializado en bases de datos'),
+  ('María López', 'maria@example.com', 'Ingeniera de software con foco en APIs REST');
 
 INSERT INTO posts (title, content, author_id, published) VALUES
   ('Introducción a Node.js', 'Node.js es un runtime de JavaScript construido sobre el motor V8 de Chrome.', 1, true),
