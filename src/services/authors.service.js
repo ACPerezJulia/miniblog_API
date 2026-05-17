@@ -1,9 +1,7 @@
 import pool from "../db/config.js";
 
 const getAllAuthors = async () => {
-  const result = await pool.query(
-    "SELECT * FROM authors ORDER BY created_at DESC",
-  );
+  const result = await pool.query("SELECT * FROM authors ORDER BY id ASC");
   return result.rows;
 };
 

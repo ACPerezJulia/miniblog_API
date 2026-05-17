@@ -1,9 +1,7 @@
 import pool from "../db/config.js";
 
 const getAllPosts = async () => {
-  const result = await pool.query(
-    "SELECT * FROM posts ORDER BY created_at DESC",
-  );
+  const result = await pool.query("SELECT * FROM posts ORDER BY id ASC");
   return result.rows;
 };
 
