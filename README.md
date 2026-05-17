@@ -27,7 +27,7 @@ Proyecto Integrador Módulo 2 — Soy Henry Full Stack.
 | Tecnología         | Uso                       |
 | ------------------ | ------------------------- |
 | Node.js v20+       | Runtime JavaScript        |
-| Express 4          | Framework HTTP            |
+| Express 5          | Framework HTTP            |
 | PostgreSQL 15+     | Base de datos relacional  |
 | pg (node-postgres) | Cliente SQL para Node     |
 | Vitest             | Testing unitario          |
@@ -195,14 +195,14 @@ El archivo `sql/setup.sql` crea las tablas de forma idempotente (se puede ejecut
 
 ### Relación
 
-Un **author** puede tener muchos **posts** (relación 1:N). Si se elimina un author, todos sus posts se eliminan automáticamente por el `ON DELETE CASCADE`.
+Un **author** puede tener muchos **posts** (relación 1:N). Si se elimina un autor, todos sus posts se eliminan automáticamente por el `ON DELETE CASCADE`.
 
 ---
 
 ## Endpoints disponibles
 
 Base URL local: `http://localhost:3000`  
-Base URL producción: `https://tu-app.up.railway.app`
+Base URL producción: `https://tu-app.railway.app`
 
 ### Autores
 
@@ -395,13 +395,13 @@ En la pestaña **"Variables"** del servicio web, agregá:
 Una vez desplegado, Railway asigna una URL pública del tipo:
 
 ```
-https://tu-app.up.railway.app
+https://tu-app.railway.app
 ```
 
 Probá accediendo a:
 
 ```
-https://tu-app.up.railway.app/authors
+https://tu-app.railway.app/authors
 ```
 
 ### Troubleshooting común en Railway
@@ -445,7 +445,7 @@ Durante el desarrollo de este proyecto utilicé Claude (Anthropic) como asistent
 
 ## Autora
 
-**Analía Pérez Juliá**  
+**Analía C. Pérez Juliá**  
 GitHub: [@ACPerezJulia](https://github.com/ACPerezJulia)  
 Proyecto Integrador M2 — Soy Henry Full Stack  
 2026
@@ -454,4 +454,4 @@ Proyecto Integrador M2 — Soy Henry Full Stack
 
 ## Licencia
 
-MIT
+ISC
