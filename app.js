@@ -1,13 +1,18 @@
-const express = require("express");
-const authorsRoutes = require("./src/routes/authors");
-const postsRoutes = require("./src/routes/posts");
-const errorHandler = require("./src/middlewares/errorHandler");
-const swaggerUi = require("swagger-ui-express");
-const YAML = require("js-yaml");
-const fs = require("fs");
-const path = require("path");
+import express from "express";
+import authorsRoutes from "./src/routes/authors.routes.js";
+import postsRoutes from "./src/routes/posts.routes.js";
+import errorHandler from "./src/middlewares/errorHandler.js";
+import swaggerUi from "swagger-ui-express";
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import yaml from "js-yaml";
+import dotenv from "dotenv";
 
-require("dotenv").config();
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 app.use(express.json());
@@ -17,12 +22,12 @@ app.use("/authors", authorsRoutes);
 app.use("/posts", postsRoutes);
 
 // Swagger
-const swaggerDocument = YAML.load(
-  fs.readFileSync(path.join(__dirname, "docs/openapi.yaml"), "utf8"),
+const swaggerDocument = yaml.load(
+  readFileSync(join(__dirname, "docs/openapi.yaml"), "utf8"),
 );
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Middleware de errores (siempre al final)
 app.use(errorHandler);
 
-module.exports = app;
+export default app;
