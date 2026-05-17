@@ -1,0 +1,337 @@
+openapi: 3.0.0
+info:
+  title: MiniBlog API
+  description: API REST para gestionar autores y publicaciones
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+  - url: https://tu-app.railway.app
+    description: Servidor de producción (Railway)
+
+paths:
+  /authors:
+    get:
+      summary: Listar todos los autores
+      tags: [Autores]
+      responses:
+        "200":
+          description: Lista de autores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Author"
+    post:
+      summary: Crear un autor
+      tags: [Autores]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorInput"
+      responses:
+        "201":
+          description: Autor creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        "400":
+          description: Datos inválidos o email duplicado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /authors/{id}:
+    get:
+      summary: Obtener un autor por ID
+      tags: [Autores]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Autor encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        "404":
+          description: Autor no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Actualizar un autor
+      tags: [Autores]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorInput"
+      responses:
+        "200":
+          description: Autor actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Author"
+        "404":
+          description: Autor no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Eliminar un autor
+      tags: [Autores]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Autor eliminado exitosamente
+        "404":
+          description: Autor no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /posts:
+    get:
+      summary: Listar todos los posts
+      tags: [Posts]
+      responses:
+        "200":
+          description: Lista de posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+    post:
+      summary: Crear un post
+      tags: [Posts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInput"
+      responses:
+        "201":
+          description: Post creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /posts/{id}:
+    get:
+      summary: Obtener un post por ID
+      tags: [Posts]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Post encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "404":
+          description: Post no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Actualizar un post
+      tags: [Posts]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInput"
+      responses:
+        "200":
+          description: Post actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "404":
+          description: Post no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Eliminar un post
+      tags: [Posts]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Post eliminado exitosamente
+        "404":
+          description: Post no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /posts/author/{authorId}:
+    get:
+      summary: Obtener posts de un autor con sus datos
+      tags: [Posts]
+      parameters:
+        - in: path
+          name: authorId
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Posts del autor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PostConAutor"
+        "404":
+          description: No se encontraron posts para ese autor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        bio:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    AuthorInput:
+      type: object
+      required: [name, email]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        bio:
+          type: string
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        author_id:
+          type: integer
+        published:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    PostInput:
+      type: object
+      required: [title, content, author_id]
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        author_id:
+          type: integer
+        published:
+          type: boolean
+
+    PostConAutor:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        author_id:
+          type: integer
+        published:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        name:
+          type: string
+        email:
+          type: string
+        bio:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
