@@ -2,6 +2,7 @@ import { Router } from "express";
 import { createAuthorsService } from "../services/authors.service.js";
 import { validateAuthor } from "../middlewares/validate.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
+import { notFound } from "../../errors.js";
 
 export function createAuthorsRouter(pool) {
   const router = Router();
@@ -17,9 +18,9 @@ export function createAuthorsRouter(pool) {
 
   router.get(
     "/:id",
-    asyncHandler(async (req, res) => {
+    asyncHandler(async (req, res, next) => {
       const author = await authorsService.getAuthorById(req.params.id);
-      if (!author) return res.status(404).json({ error: "Autor no encontrado" });
+      if (!author) return next(notFound("Autor no encontrado"));
       res.json(author);
     }),
   );
@@ -37,23 +38,23 @@ export function createAuthorsRouter(pool) {
   router.put(
     "/:id",
     validateAuthor,
-    asyncHandler(async (req, res) => {
+    asyncHandler(async (req, res, next) => {
       const { name, email, bio } = req.body;
       const author = await authorsService.updateAuthor(req.params.id, {
         name,
         email,
         bio,
       });
-      if (!author) return res.status(404).json({ error: "Autor no encontrado" });
+      if (!author) return next(notFound("Autor no encontrado"));
       res.json(author);
     }),
   );
 
   router.delete(
     "/:id",
-    asyncHandler(async (req, res) => {
+    asyncHandler(async (req, res, next) => {
       const author = await authorsService.deleteAuthor(req.params.id);
-      if (!author) return res.status(404).json({ error: "Autor no encontrado" });
+      if (!author) return next(notFound("Autor no encontrado"));
       res.status(204).send();
     }),
   );
