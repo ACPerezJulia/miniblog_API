@@ -74,6 +74,17 @@ describe("validateAuthor", () => {
 
     expect(next.error().status).toBe(400);
   });
+
+  test("sanitiza name con trim y email en minúsculas", () => {
+    const req = { body: { name: "  Ana  ", email: "  ANA@EXAMPLE.COM  " } };
+    const next = mockNext();
+
+    validateAuthor(req, {}, next);
+
+    expect(next.passed()).toBe(true);
+    expect(req.body.name).toBe("Ana");
+    expect(req.body.email).toBe("ana@example.com");
+  });
 });
 
 describe("validatePost", () => {
@@ -129,5 +140,16 @@ describe("validatePost", () => {
     validatePost(req, {}, next);
 
     expect(next.error().status).toBe(400);
+  });
+
+  test("sanitiza title y content con trim", () => {
+    const req = { body: { title: "  Mi título  ", content: "  Contenido  ", author_id: 1 } };
+    const next = mockNext();
+
+    validatePost(req, {}, next);
+
+    expect(next.passed()).toBe(true);
+    expect(req.body.title).toBe("Mi título");
+    expect(req.body.content).toBe("Contenido");
   });
 });

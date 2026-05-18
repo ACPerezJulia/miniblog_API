@@ -10,11 +10,14 @@ export const validateAuthor = (req, res, next) => {
 
   if (!email || typeof email !== "string") {
     errors.push("El email es obligatorio");
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim().toLowerCase())) {
     errors.push("El email no tiene un formato válido");
   }
 
   if (errors.length) return next(badRequest(errors.join(". ")));
+
+  req.body.name = name.trim();
+  req.body.email = email.trim().toLowerCase();
   next();
 };
 
@@ -36,5 +39,8 @@ export const validatePost = (req, res, next) => {
   }
 
   if (errors.length) return next(badRequest(errors.join(". ")));
+
+  req.body.title = title.trim();
+  req.body.content = content.trim();
   next();
 };

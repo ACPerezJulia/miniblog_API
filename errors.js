@@ -6,5 +6,3 @@ function createError(status, message) {
 
 export const badRequest = (msg) => createError(400, msg);
 export const notFound = (msg) => createError(404, msg);
-export const conflict = (msg) => createError(409, msg);
-export const internalError = (msg) => createError(500, msg);
