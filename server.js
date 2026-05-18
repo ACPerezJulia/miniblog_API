@@ -1,12 +1,13 @@
 if (process.env.NODE_ENV !== "production") {
-  const dotenv = await import("dotenv");
-  dotenv.default.config();
+  const { default: dotenv } = await import("dotenv");
+  dotenv.config();
 }
 
-import app from "./app.js";
+const { createApp } = await import("./app.js");
+const { default: pool } = await import("./src/db/config.js");
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+createApp({ pool }).listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
