@@ -7,7 +7,7 @@ info:
 servers:
   - url: http://localhost:3000
     description: Servidor local
-  - url: https://tu-app.railway.app
+  - url: https://miniblogapi-production.up.railway.app
     description: Servidor de producción (Railway)
 
 paths:

@@ -24,16 +24,16 @@ Proyecto Integrador Módulo 2 — Soy Henry Full Stack.
 
 ## Tecnologías
 
-| Tecnología         | Uso                       |
-| ------------------ | ------------------------- |
-| Node.js v20+       | Runtime JavaScript        |
-| Express 5          | Framework HTTP            |
-| PostgreSQL 15+     | Base de datos relacional  |
-| pg (node-postgres) | Cliente SQL para Node     |
-| Vitest             | Testing unitario          |
-| Supertest          | Testing de endpoints HTTP |
-| dotenv             | Variables de entorno      |
-| swagger-ui-express | Interfaz visual de la API |
+| Tecnología         | Uso                        |
+| ------------------ | -------------------------- |
+| Node.js v20+       | Runtime JavaScript         |
+| Express 5          | Framework HTTP             |
+| PostgreSQL 15+     | Base de datos relacional   |
+| pg (node-postgres) | Cliente SQL para Node      |
+| Vitest             | Testing unitario           |
+| Supertest          | Testing de endpoints HTTP  |
+| dotenv             | Variables de entorno       |
+| swagger-ui-express | Interfaz visual de la API  |
 | js-yaml            | Parseo del archivo OpenAPI |
 
 ---
@@ -400,13 +400,13 @@ En la pestaña **"Variables"** del servicio web, agregá:
 Una vez desplegado, Railway asigna una URL pública del tipo:
 
 ```
-https://tu-app.railway.app
+https://miniblogapi-production.up.railway.app
 ```
 
 Probá accediendo a:
 
 ```
-https://tu-app.railway.app/authors
+https://miniblogapi-production.up.railway.app/authors
 ```
 
 ### Troubleshooting común en Railway
