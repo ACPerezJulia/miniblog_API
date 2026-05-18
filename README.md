@@ -54,6 +54,7 @@ miniblog_API/
 │       ├── asyncHandler.js       # Wrapper para handlers async
 │       └── validate.js           # Validaciones de campos
 ├── tests/
+│   ├── setup.js                  # Carga dotenv antes de los tests
 │   ├── unit/
 │   │   └── validate.test.js      # Tests unitarios de validators
 │   └── integration/
@@ -63,8 +64,10 @@ miniblog_API/
 │   └── openapi.yaml              # Documentación OpenAPI
 ├── sql/
 │   └── setup.sql                 # Script creación de tablas + seed
-├── app.js                        # Configuración de Express
+├── app.js                        # Factory createApp({ pool })
 ├── server.js                     # Arranque del servidor
+├── errors.js                     # Helpers de error (notFound, badRequest, etc.)
+├── vitest.config.js              # Configuración de Vitest
 ├── .env.example                  # Template de variables de entorno
 ├── .gitignore
 ├── package.json
@@ -264,8 +267,8 @@ La API valida los datos de entrada y responde con códigos HTTP apropiados:
 | Situación                    | Status | Respuesta                                    |
 | ---------------------------- | ------ | -------------------------------------------- |
 | Recurso creado correctamente | 201    | Objeto creado                                |
-| Email ya registrado          | 400    | `{ "error": "El email ya está registrado" }` |
 | Campo obligatorio vacío      | 400    | `{ "error": "El campo X es obligatorio" }`   |
+| Email ya registrado          | 409    | `{ "error": "El email ya está registrado" }` |
 | Recurso no encontrado        | 404    | `{ "error": "Autor/Post no encontrado" }`    |
 | Error interno del servidor   | 500    | `{ "error": "Error interno del servidor" }`  |
 
@@ -312,7 +315,7 @@ npm run test:coverage
 | `integration/authors.test.js` | GET /authors/:id devuelve 404 si no existe    |
 | `integration/authors.test.js` | POST /authors crea autor y devuelve 201       |
 | `integration/authors.test.js` | POST /authors devuelve 400 si falta name      |
-| `integration/authors.test.js` | POST /authors devuelve 400 si email duplicado |
+| `integration/authors.test.js` | POST /authors devuelve 409 si email duplicado |
 | `integration/posts.test.js`   | GET /posts devuelve lista con status 200      |
 | `integration/posts.test.js`   | POST /posts crea post y devuelve 201          |
 | `integration/posts.test.js`   | DELETE /posts/:id devuelve 404 si no existe   |
