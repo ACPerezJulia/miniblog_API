@@ -41,7 +41,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/Author"
         "400":
-          description: Datos inválidos o email duplicado
+          description: Datos inválidos o email ya registrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: El email ya está registrado
           content:
             application/json:
               schema:

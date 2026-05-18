@@ -45,12 +45,12 @@ describe("Autores API", () => {
     expect(res.body).toHaveProperty("error");
   });
 
-  test("POST /authors - devuelve 400 si el email ya existe", async () => {
+  test("POST /authors - devuelve 409 si el email ya existe", async () => {
     const res = await request(app).post("/authors").send({
       name: "Ana Garcia",
       email: "ana@example.com",
     });
-    expect(res.statusCode).toBe(400);
+    expect(res.statusCode).toBe(409);
     expect(res.body).toHaveProperty("error");
   });
 });
