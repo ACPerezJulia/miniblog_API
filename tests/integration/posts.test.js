@@ -109,4 +109,28 @@ describe("Posts API", () => {
     expect(res.statusCode).toBe(404);
     expect(res.body).toHaveProperty("error");
   });
+
+  test("PUT /posts/:id - actualiza un post y devuelve 200", async () => {
+    const res = await request(app)
+      .put(`/posts/${testPost.id}`)
+      .send({
+        title: `${PREFIX}-actualizado`,
+        content: "Contenido actualizado",
+        author_id: testAuthor.id,
+        published: true,
+      });
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("id", testPost.id);
+    expect(res.body.title).toBe(`${PREFIX}-actualizado`);
+  });
+
+  test("DELETE /posts/:id - elimina un post y devuelve 204", async () => {
+    const { rows } = await pool.query(
+      "INSERT INTO posts (title, content, author_id, published) VALUES ($1, $2, $3, $4) RETURNING *",
+      [`${PREFIX}-eliminar`, "Para eliminar", testAuthor.id, false],
+    );
+    const res = await request(app).delete(`/posts/${rows[0].id}`);
+    expect(res.statusCode).toBe(204);
+    expect(res.body).toEqual({});
+  });
 });

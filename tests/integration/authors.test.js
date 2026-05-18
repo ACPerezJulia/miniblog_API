@@ -79,4 +79,23 @@ describe("Autores API", () => {
     expect(res.statusCode).toBe(409);
     expect(res.body).toHaveProperty("error");
   });
+
+  test("PUT /authors/:id - actualiza un autor y devuelve 200", async () => {
+    const res = await request(app)
+      .put(`/authors/${testAuthor.id}`)
+      .send({ name: `${PREFIX}-actualizado`, email: testAuthor.email, bio: "Bio actualizada" });
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("id", testAuthor.id);
+    expect(res.body.name).toBe(`${PREFIX}-actualizado`);
+  });
+
+  test("DELETE /authors/:id - elimina un autor y devuelve 204", async () => {
+    const { rows } = await pool.query(
+      "INSERT INTO authors (name, email, bio) VALUES ($1, $2, $3) RETURNING *",
+      [`${PREFIX}-eliminar`, `${PREFIX}-eliminar@example.com`, "Para eliminar"],
+    );
+    const res = await request(app).delete(`/authors/${rows[0].id}`);
+    expect(res.statusCode).toBe(204);
+    expect(res.body).toEqual({});
+  });
 });
