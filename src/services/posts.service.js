@@ -10,6 +10,12 @@ export function createPostsService(pool) {
   };
 
   const getPostsByAuthorId = async (authorId) => {
+    const authorCheck = await pool.query(
+      "SELECT id FROM authors WHERE id = $1",
+      [authorId],
+    );
+    if (!authorCheck.rows[0]) return null;
+
     const result = await pool.query(
       `SELECT posts.*, authors.name, authors.email, authors.bio
        FROM posts

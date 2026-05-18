@@ -267,7 +267,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/PostConAutor"
         "404":
-          description: No se encontraron posts para ese autor
+          description: Autor no encontrado
           content:
             application/json:
               schema:

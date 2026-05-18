@@ -20,8 +20,7 @@ export function createPostsRouter(pool) {
     "/author/:authorId",
     asyncHandler(async (req, res, next) => {
       const posts = await postsService.getPostsByAuthorId(req.params.authorId);
-      if (!posts.length)
-        return next(notFound("No se encontraron posts para ese autor"));
+      if (posts === null) return next(notFound("Autor no encontrado"));
       res.json(posts);
     }),
   );

@@ -85,4 +85,28 @@ describe("Posts API", () => {
     expect(res.statusCode).toBe(404);
     expect(res.body).toHaveProperty("error");
   });
+
+  test("GET /posts/author/:authorId - devuelve posts del autor", async () => {
+    const res = await request(app).get(`/posts/author/${testAuthor.id}`);
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body[0]).toHaveProperty("author_id", testAuthor.id);
+  });
+
+  test("GET /posts/author/:authorId - devuelve [] si el autor existe sin posts", async () => {
+    const { rows } = await pool.query(
+      "INSERT INTO authors (name, email, bio) VALUES ($1, $2, $3) RETURNING *",
+      [`${PREFIX}-sinposts`, `${PREFIX}-sinposts@example.com`, "Sin posts"],
+    );
+    const res = await request(app).get(`/posts/author/${rows[0].id}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual([]);
+  });
+
+  test("GET /posts/author/:authorId - devuelve 404 si el autor no existe", async () => {
+    const res = await request(app).get("/posts/author/9999999");
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty("error");
+  });
 });
