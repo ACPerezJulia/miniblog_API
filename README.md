@@ -33,6 +33,8 @@ Proyecto Integrador Módulo 2 — Soy Henry Full Stack.
 | Vitest             | Testing unitario          |
 | Supertest          | Testing de endpoints HTTP |
 | dotenv             | Variables de entorno      |
+| swagger-ui-express | Interfaz visual de la API |
+| js-yaml            | Parseo del archivo OpenAPI |
 
 ---
 
