@@ -7,6 +7,7 @@ import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import yaml from "js-yaml";
+import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,6 +19,7 @@ const swaggerDocument = yaml.load(
 export function createApp({ pool }) {
   const app = express();
   app.use(express.json());
+  app.use(cors());
 
   app.use("/authors", createAuthorsRouter(pool));
   app.use("/posts", createPostsRouter(pool));
