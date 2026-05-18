@@ -210,6 +210,13 @@ Base URL local: `http://localhost:3000`
 Base URL producción: `https://miniblogapi-production.up.railway.app`  
 Documentación interactiva (Swagger): `https://miniblogapi-production.up.railway.app/api-docs`
 
+### General
+
+| Método | Ruta       | Descripción                                      | Status exitoso |
+| ------ | ---------- | ------------------------------------------------ | -------------- |
+| GET    | `/`        | Bienvenida: muestra endpoints y link a los docs  | 200            |
+| GET    | `/api-docs`| Documentación interactiva Swagger                | 200            |
+
 ### Autores
 
 | Método | Ruta           | Descripción              | Status exitoso |

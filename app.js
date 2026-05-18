@@ -21,8 +21,23 @@ export function createApp({ pool }) {
   app.use(express.json());
   app.use(cors());
 
+  // Ruta de bienvenida
+  app.get("/", (req, res) => {
+    res.json({
+      mensaje: "Bienvenida a MiniBlog API",
+      documentacion: "/api-docs",
+      endpoints: {
+        autores: "/authors",
+        posts: "/posts",
+      },
+    });
+  });
+
+  // Rutas
   app.use("/authors", createAuthorsRouter(pool));
   app.use("/posts", createPostsRouter(pool));
+
+  // Ruta de documentación
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
