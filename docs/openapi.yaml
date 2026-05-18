@@ -15,15 +15,27 @@ paths:
     get:
       summary: Listar todos los autores
       tags: [Autores]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Número de página
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Registros por página
       responses:
         "200":
-          description: Lista de autores
+          description: Lista paginada de autores
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Author"
+                $ref: "#/components/schemas/PaginatedAuthors"
     post:
       summary: Crear un autor
       tags: [Autores]
@@ -139,15 +151,27 @@ paths:
     get:
       summary: Listar todos los posts
       tags: [Posts]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Número de página
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Registros por página
       responses:
         "200":
-          description: Lista de posts
+          description: Lista paginada de posts
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Post"
+                $ref: "#/components/schemas/PaginatedPosts"
     post:
       summary: Crear un post
       tags: [Posts]
@@ -275,6 +299,34 @@ paths:
 
 components:
   schemas:
+    PaginatedAuthors:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Author"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+
+    PaginatedPosts:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Post"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+
     Author:
       type: object
       properties:

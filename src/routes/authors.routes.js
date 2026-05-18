@@ -11,8 +11,10 @@ export function createAuthorsRouter(pool) {
   router.get(
     "/",
     asyncHandler(async (req, res) => {
-      const authors = await authorsService.getAllAuthors();
-      res.json(authors);
+      const page = Math.max(1, parseInt(req.query.page) || 1);
+      const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
+      const result = await authorsService.getAllAuthors({ page, limit });
+      res.json(result);
     }),
   );
 

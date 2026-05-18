@@ -1,7 +1,16 @@
 export function createAuthorsService(pool) {
-  const getAllAuthors = async () => {
-    const result = await pool.query("SELECT * FROM authors ORDER BY id ASC");
-    return result.rows;
+  const getAllAuthors = async ({ page = 1, limit = 10 } = {}) => {
+    const offset = (page - 1) * limit;
+    const [dataResult, countResult] = await Promise.all([
+      pool.query("SELECT * FROM authors ORDER BY id ASC LIMIT $1 OFFSET $2", [limit, offset]),
+      pool.query("SELECT COUNT(*) FROM authors"),
+    ]);
+    return {
+      data: dataResult.rows,
+      total: parseInt(countResult.rows[0].count),
+      page,
+      limit,
+    };
   };
 
   const getAuthorById = async (id) => {

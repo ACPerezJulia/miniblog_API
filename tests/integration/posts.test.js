@@ -30,11 +30,21 @@ describe("Posts API", () => {
     await pool.end();
   });
 
-  test("GET /posts - devuelve lista de posts", async () => {
+  test("GET /posts - devuelve lista paginada de posts", async () => {
     const res = await request(app).get("/posts");
     expect(res.statusCode).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThan(0);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBeGreaterThan(0);
+    expect(res.body).toHaveProperty("total");
+    expect(res.body).toHaveProperty("page", 1);
+    expect(res.body).toHaveProperty("limit", 10);
+  });
+
+  test("GET /posts - respeta el parámetro limit", async () => {
+    const res = await request(app).get("/posts?limit=1");
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data.length).toBeLessThanOrEqual(1);
+    expect(res.body.limit).toBe(1);
   });
 
   test("GET /posts/:id - devuelve el post de test", async () => {

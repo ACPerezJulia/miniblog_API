@@ -11,8 +11,10 @@ export function createPostsRouter(pool) {
   router.get(
     "/",
     asyncHandler(async (req, res) => {
-      const posts = await postsService.getAllPosts();
-      res.json(posts);
+      const page = Math.max(1, parseInt(req.query.page) || 1);
+      const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
+      const result = await postsService.getAllPosts({ page, limit });
+      res.json(result);
     }),
   );
 

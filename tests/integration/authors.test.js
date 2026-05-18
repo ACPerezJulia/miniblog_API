@@ -22,11 +22,21 @@ describe("Autores API", () => {
     await pool.end();
   });
 
-  test("GET /authors - devuelve lista de autores", async () => {
+  test("GET /authors - devuelve lista paginada de autores", async () => {
     const res = await request(app).get("/authors");
     expect(res.statusCode).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThan(0);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBeGreaterThan(0);
+    expect(res.body).toHaveProperty("total");
+    expect(res.body).toHaveProperty("page", 1);
+    expect(res.body).toHaveProperty("limit", 10);
+  });
+
+  test("GET /authors - respeta el parámetro limit", async () => {
+    const res = await request(app).get("/authors?limit=1");
+    expect(res.statusCode).toBe(200);
+    expect(res.body.data.length).toBeLessThanOrEqual(1);
+    expect(res.body.limit).toBe(1);
   });
 
   test("GET /authors/:id - devuelve el autor de test", async () => {
