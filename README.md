@@ -207,7 +207,8 @@ Un **author** puede tener muchos **posts** (relación 1:N). Si se elimina un aut
 ## Endpoints disponibles
 
 Base URL local: `http://localhost:3000`  
-Base URL producción: `https://miniblogapi-production.up.railway.app`
+Base URL producción: `https://miniblogapi-production.up.railway.app`  
+Documentación interactiva (Swagger): `https://miniblogapi-production.up.railway.app/api-docs`
 
 ### Autores
 
