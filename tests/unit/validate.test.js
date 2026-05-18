@@ -1,111 +1,133 @@
 import { describe, test, expect } from "vitest";
-
-// Simulamos req y res para testear los validators como funciones puras
-const mockRes = () => {
-  const res = {};
-  res.status = (code) => {
-    res.statusCode = code;
-    return res;
-  };
-  res.json = (body) => {
-    res.body = body;
-    return res;
-  };
-  return res;
-};
+import { validateAuthor, validatePost } from "../../src/middlewares/validate.js";
 
 const mockNext = () => {
-  let called = false;
-  const next = () => {
-    called = true;
-  };
-  next.wasCalled = () => called;
+  let arg;
+  const next = (err) => { arg = err; };
+  next.error = () => arg;
+  next.passed = () => arg === undefined;
   return next;
 };
 
-// Importamos los validators
-import {
-  validateAuthor,
-  validatePost,
-} from "../../src/middlewares/validate.js";
-
 describe("validateAuthor", () => {
-  test("llama next() si name y email están presentes", () => {
+  test("llama next() sin error si name y email son válidos", () => {
     const req = { body: { name: "Ana", email: "ana@example.com" } };
-    const res = mockRes();
     const next = mockNext();
 
-    validateAuthor(req, res, next);
+    validateAuthor(req, {}, next);
 
-    expect(next.wasCalled()).toBe(true);
+    expect(next.passed()).toBe(true);
   });
 
-  test("devuelve 400 si falta name", () => {
+  test("error 400 si falta name", () => {
     const req = { body: { email: "ana@example.com" } };
-    const res = mockRes();
     const next = mockNext();
 
-    validateAuthor(req, res, next);
+    validateAuthor(req, {}, next);
 
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toHaveProperty("error");
-    expect(next.wasCalled()).toBe(false);
+    expect(next.error()).toBeInstanceOf(Error);
+    expect(next.error().status).toBe(400);
   });
 
-  test("devuelve 400 si falta email", () => {
+  test("error 400 si falta email", () => {
     const req = { body: { name: "Ana" } };
-    const res = mockRes();
     const next = mockNext();
 
-    validateAuthor(req, res, next);
+    validateAuthor(req, {}, next);
 
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toHaveProperty("error");
+    expect(next.error()).toBeInstanceOf(Error);
+    expect(next.error().status).toBe(400);
   });
 
-  test("devuelve 400 si name es string vacío", () => {
+  test("error 400 si name es string vacío", () => {
     const req = { body: { name: "", email: "ana@example.com" } };
-    const res = mockRes();
     const next = mockNext();
 
-    validateAuthor(req, res, next);
+    validateAuthor(req, {}, next);
 
-    expect(res.statusCode).toBe(400);
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si name es solo espacios", () => {
+    const req = { body: { name: "   ", email: "ana@example.com" } };
+    const next = mockNext();
+
+    validateAuthor(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si email no tiene formato válido", () => {
+    const req = { body: { name: "Ana", email: "noesunmail" } };
+    const next = mockNext();
+
+    validateAuthor(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si email no tiene dominio", () => {
+    const req = { body: { name: "Ana", email: "ana@" } };
+    const next = mockNext();
+
+    validateAuthor(req, {}, next);
+
+    expect(next.error().status).toBe(400);
   });
 });
 
 describe("validatePost", () => {
-  test("llama next() si title, content y author_id están presentes", () => {
-    const req = {
-      body: { title: "Título", content: "Contenido", author_id: 1 },
-    };
-    const res = mockRes();
+  test("llama next() sin error si title, content y author_id son válidos", () => {
+    const req = { body: { title: "Título", content: "Contenido", author_id: 1 } };
     const next = mockNext();
 
-    validatePost(req, res, next);
+    validatePost(req, {}, next);
 
-    expect(next.wasCalled()).toBe(true);
+    expect(next.passed()).toBe(true);
   });
 
-  test("devuelve 400 si falta title", () => {
+  test("error 400 si falta title", () => {
     const req = { body: { content: "Contenido", author_id: 1 } };
-    const res = mockRes();
     const next = mockNext();
 
-    validatePost(req, res, next);
+    validatePost(req, {}, next);
 
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toHaveProperty("error");
+    expect(next.error().status).toBe(400);
   });
 
-  test("devuelve 400 si falta author_id", () => {
+  test("error 400 si falta author_id", () => {
     const req = { body: { title: "Título", content: "Contenido" } };
-    const res = mockRes();
     const next = mockNext();
 
-    validatePost(req, res, next);
+    validatePost(req, {}, next);
 
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toHaveProperty("error");
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si author_id es string no numérico", () => {
+    const req = { body: { title: "Título", content: "Contenido", author_id: "abc" } };
+    const next = mockNext();
+
+    validatePost(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si author_id es negativo", () => {
+    const req = { body: { title: "Título", content: "Contenido", author_id: -1 } };
+    const next = mockNext();
+
+    validatePost(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si title es solo espacios", () => {
+    const req = { body: { title: "   ", content: "Contenido", author_id: 1 } };
+    const next = mockNext();
+
+    validatePost(req, {}, next);
+
+    expect(next.error().status).toBe(400);
   });
 });
