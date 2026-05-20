@@ -1,7 +1,6 @@
 # MiniBlog API
 
-API REST backend para gestión de autores y publicaciones, construida con Node.js, Express y PostgreSQL.  
-Proyecto Integrador Módulo 2 — Soy Henry Full Stack.
+API REST backend para gestión de autores y publicaciones, construida con Node.js, Express y PostgreSQL.
 
 ---
 
@@ -207,8 +206,8 @@ Un **author** puede tener muchos **posts** (relación 1:N). Si se elimina un aut
 ## Endpoints disponibles
 
 Base URL local: `http://localhost:3000`  
-Base URL producción: `https://miniblogapi-production.up.railway.app`  
-Documentación interactiva (Swagger): `https://miniblogapi-production.up.railway.app/api-docs`
+Base URL producción: [`https://miniblogapi-production.up.railway.app`](https://miniblogapi-production.up.railway.app)  
+Documentación interactiva (Swagger): [`https://miniblogapi-production.up.railway.app/api-docs`](https://miniblogapi-production.up.railway.app/api-docs)
 
 ### General
 
