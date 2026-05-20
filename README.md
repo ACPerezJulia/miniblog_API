@@ -346,7 +346,7 @@ npm run dev
 Luego abrí en el navegador:
 
 ```
-[http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+http://localhost:3000/api-docs
 ```
 
 **Opción 2 — Usando el editor online:**
@@ -407,13 +407,13 @@ En la pestaña **"Variables"** del servicio web, agregá:
 Una vez desplegado, Railway asigna una URL pública del tipo:
 
 ```
-[https://miniblogapi-production.up.railway.app](https://miniblogapi-production.up.railway.app)
+https://miniblogapi-production.up.railway.app
 ```
 
 Probá accediendo a:
 
 ```
-[https://miniblogapi-production.up.railway.app/authors](https://miniblogapi-production.up.railway.app/authors)
+https://miniblogapi-production.up.railway.app/authors
 ```
 
 ### Troubleshooting común en Railway
