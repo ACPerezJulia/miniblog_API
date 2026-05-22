@@ -1,7 +1,6 @@
 # MiniBlog API
 
-API REST backend para gestión de autores y publicaciones, construida con Node.js, Express y PostgreSQL.  
-Proyecto Integrador Módulo 2 — Soy Henry Full Stack.
+API REST backend para gestión de autores y publicaciones, construida con Node.js, Express y PostgreSQL.
 
 ---
 
@@ -207,8 +206,8 @@ Un **author** puede tener muchos **posts** (relación 1:N). Si se elimina un aut
 ## Endpoints disponibles
 
 Base URL local: `http://localhost:3000`  
-Base URL producción: `https://miniblogapi-production.up.railway.app`  
-Documentación interactiva (Swagger): `https://miniblogapi-production.up.railway.app/api-docs`
+Base URL producción: [`https://miniblogapi-production.up.railway.app`](https://miniblogapi-production.up.railway.app)  
+Documentación interactiva (Swagger): [`https://miniblogapi-production.up.railway.app/api-docs`](https://miniblogapi-production.up.railway.app/api-docs)
 
 ### General
 
@@ -440,7 +439,7 @@ Durante el desarrollo de este proyecto utilicé Claude (Anthropic) como asistent
 | Configuración de pg.Pool | Se consultó el setup con soporte para `DATABASE_URL` y variables separadas    |
 | Middleware de errores    | Se solicitó un ejemplo de middleware centralizado con `asyncHandler`          |
 | Queries SQL              | Se revisó la sintaxis de queries parametrizadas con `$1, $2` en node-postgres |
-| Tests con Vitest         | Se consultó cómo organizar tests unitarios e de integración                   |
+| Tests con Vitest         | Se consultó cómo organizar tests unitarios y de integración                   |
 | OpenAPI                  | Se generó la estructura base del archivo `openapi.yaml`                       |
 | README                   | Se generó la documentación del proyecto                                       |
 
