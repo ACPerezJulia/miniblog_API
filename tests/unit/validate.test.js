@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { validateAuthor, validatePost } from "../../src/middlewares/validate.js";
+import { validateAuthor, validatePost, validateIntParam } from "../../src/middlewares/validate.js";
 
 const mockNext = () => {
   let arg;
@@ -151,5 +151,108 @@ describe("validatePost", () => {
     expect(next.passed()).toBe(true);
     expect(req.body.title).toBe("Mi título");
     expect(req.body.content).toBe("Contenido");
+  });
+
+  test("llama next() sin error si published es true", () => {
+    const req = { body: { title: "T", content: "C", author_id: 1, published: true } };
+    const next = mockNext();
+
+    validatePost(req, {}, next);
+
+    expect(next.passed()).toBe(true);
+  });
+
+  test("llama next() sin error si published es false", () => {
+    const req = { body: { title: "T", content: "C", author_id: 1, published: false } };
+    const next = mockNext();
+
+    validatePost(req, {}, next);
+
+    expect(next.passed()).toBe(true);
+  });
+
+  test("llama next() sin error si published no está presente", () => {
+    const req = { body: { title: "T", content: "C", author_id: 1 } };
+    const next = mockNext();
+
+    validatePost(req, {}, next);
+
+    expect(next.passed()).toBe(true);
+  });
+
+  test("error 400 si published es un string", () => {
+    const req = { body: { title: "T", content: "C", author_id: 1, published: "true" } };
+    const next = mockNext();
+
+    validatePost(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si published es un número", () => {
+    const req = { body: { title: "T", content: "C", author_id: 1, published: 1 } };
+    const next = mockNext();
+
+    validatePost(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+});
+
+describe("validateIntParam", () => {
+  test("llama next() sin error si el parámetro es un entero positivo", () => {
+    const req = { params: { id: "5" } };
+    const next = mockNext();
+
+    validateIntParam("id")(req, {}, next);
+
+    expect(next.passed()).toBe(true);
+    expect(req.params.id).toBe(5);
+  });
+
+  test("error 400 si el parámetro es texto no numérico", () => {
+    const req = { params: { id: "abc" } };
+    const next = mockNext();
+
+    validateIntParam("id")(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si el parámetro es 0", () => {
+    const req = { params: { id: "0" } };
+    const next = mockNext();
+
+    validateIntParam("id")(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si el parámetro es negativo", () => {
+    const req = { params: { id: "-3" } };
+    const next = mockNext();
+
+    validateIntParam("id")(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+
+  test("error 400 si el parámetro es decimal", () => {
+    const req = { params: { id: "1.5" } };
+    const next = mockNext();
+
+    validateIntParam("id")(req, {}, next);
+
+    expect(next.error().status).toBe(400);
+  });
+
+  test("normaliza el parámetro a número entero", () => {
+    const req = { params: { authorId: "42" } };
+    const next = mockNext();
+
+    validateIntParam("authorId")(req, {}, next);
+
+    expect(next.passed()).toBe(true);
+    expect(req.params.authorId).toBe(42);
   });
 });

@@ -53,6 +53,18 @@ describe("Autores API", () => {
     expect(res.body).toHaveProperty("error");
   });
 
+  test("GET /authors/:id - devuelve 400 si el id no es un entero", async () => {
+    const res = await request(app).get("/authors/abc");
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
+
+  test("DELETE /authors/:id - devuelve 400 si el id no es un entero", async () => {
+    const res = await request(app).delete("/authors/abc");
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
+
   test("POST /authors - crea un autor correctamente", async () => {
     const res = await request(app)
       .post("/authors")

@@ -60,6 +60,18 @@ describe("Posts API", () => {
     expect(res.body).toHaveProperty("error");
   });
 
+  test("GET /posts/:id - devuelve 400 si el id no es un entero", async () => {
+    const res = await request(app).get("/posts/abc");
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
+
+  test("GET /posts/author/:authorId - devuelve 400 si authorId no es un entero", async () => {
+    const res = await request(app).get("/posts/author/abc");
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
+
   test("POST /posts - crea un post correctamente", async () => {
     const res = await request(app)
       .post("/posts")
@@ -86,6 +98,22 @@ describe("Posts API", () => {
     const res = await request(app)
       .post("/posts")
       .send({ title: "Título", content: "Contenido", author_id: -1 });
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
+
+  test("POST /posts - devuelve 400 si author_id es válido pero no existe", async () => {
+    const res = await request(app)
+      .post("/posts")
+      .send({ title: "Título", content: "Contenido", author_id: 9999999 });
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty("error");
+  });
+
+  test("POST /posts - devuelve 400 si published no es un booleano", async () => {
+    const res = await request(app)
+      .post("/posts")
+      .send({ title: "Título", content: "Contenido", author_id: testAuthor.id, published: "quizás" });
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty("error");
   });

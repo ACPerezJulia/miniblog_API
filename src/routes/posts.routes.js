@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createPostsService } from "../services/posts.service.js";
-import { validatePost } from "../middlewares/validate.js";
+import { validatePost, validateIntParam } from "../middlewares/validate.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import { notFound } from "../../errors.js";
 
@@ -20,6 +20,7 @@ export function createPostsRouter(pool) {
 
   router.get(
     "/author/:authorId",
+    validateIntParam("authorId"),
     asyncHandler(async (req, res, next) => {
       const posts = await postsService.getPostsByAuthorId(req.params.authorId);
       if (posts === null) return next(notFound("Autor no encontrado"));
@@ -29,6 +30,7 @@ export function createPostsRouter(pool) {
 
   router.get(
     "/:id",
+    validateIntParam("id"),
     asyncHandler(async (req, res, next) => {
       const post = await postsService.getPostById(req.params.id);
       if (!post) return next(notFound("Post no encontrado"));
@@ -53,6 +55,7 @@ export function createPostsRouter(pool) {
 
   router.put(
     "/:id",
+    validateIntParam("id"),
     validatePost,
     asyncHandler(async (req, res, next) => {
       const { title, content, author_id, published } = req.body;
@@ -69,6 +72,7 @@ export function createPostsRouter(pool) {
 
   router.delete(
     "/:id",
+    validateIntParam("id"),
     asyncHandler(async (req, res, next) => {
       const post = await postsService.deletePost(req.params.id);
       if (!post) return next(notFound("Post no encontrado"));

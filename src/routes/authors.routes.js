@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createAuthorsService } from "../services/authors.service.js";
-import { validateAuthor } from "../middlewares/validate.js";
+import { validateAuthor, validateIntParam } from "../middlewares/validate.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import { notFound } from "../../errors.js";
 
@@ -20,6 +20,7 @@ export function createAuthorsRouter(pool) {
 
   router.get(
     "/:id",
+    validateIntParam("id"),
     asyncHandler(async (req, res, next) => {
       const author = await authorsService.getAuthorById(req.params.id);
       if (!author) return next(notFound("Autor no encontrado"));
@@ -39,6 +40,7 @@ export function createAuthorsRouter(pool) {
 
   router.put(
     "/:id",
+    validateIntParam("id"),
     validateAuthor,
     asyncHandler(async (req, res, next) => {
       const { name, email, bio } = req.body;
@@ -54,6 +56,7 @@ export function createAuthorsRouter(pool) {
 
   router.delete(
     "/:id",
+    validateIntParam("id"),
     asyncHandler(async (req, res, next) => {
       const author = await authorsService.deleteAuthor(req.params.id);
       if (!author) return next(notFound("Autor no encontrado"));

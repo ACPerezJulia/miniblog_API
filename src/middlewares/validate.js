@@ -1,5 +1,15 @@
 import { badRequest } from "../../errors.js";
 
+export const validateIntParam = (paramName) => (req, res, next) => {
+  const raw = req.params[paramName];
+  const parsed = parseInt(raw, 10);
+  if (!Number.isInteger(parsed) || parsed <= 0 || String(parsed) !== raw) {
+    return next(badRequest(`El parámetro '${paramName}' debe ser un número entero positivo`));
+  }
+  req.params[paramName] = parsed;
+  next();
+};
+
 export const validateAuthor = (req, res, next) => {
   const { name, email } = req.body;
   const errors = [];
@@ -22,7 +32,7 @@ export const validateAuthor = (req, res, next) => {
 };
 
 export const validatePost = (req, res, next) => {
-  const { title, content, author_id } = req.body;
+  const { title, content, author_id, published } = req.body;
   const errors = [];
 
   if (!title || typeof title !== "string" || !title.trim()) {
@@ -36,6 +46,10 @@ export const validatePost = (req, res, next) => {
   const authorId = Number(author_id);
   if (!author_id || !Number.isInteger(authorId) || authorId <= 0) {
     errors.push("El ID de autor debe ser un número entero positivo");
+  }
+
+  if (published !== undefined && typeof published !== "boolean") {
+    errors.push("El campo published debe ser un booleano (true o false)");
   }
 
   if (errors.length) return next(badRequest(errors.join(". ")));
